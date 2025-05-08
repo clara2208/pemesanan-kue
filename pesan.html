@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Pemesanan</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Tambahkan pustaka jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h3>Form Pemesanan</h3>
+  </header>
+
+  <main>
+    <section id="ringkasan-pesanan">
+      <p>Memuat ringkasan pesanan...</p>
+    </section>
+
+    <section>
+      <h2>Data Pemesan</h2>
+      <form id="order-form">
+        <label for="nama">Nama:</label><br>
+        <input type="text" id="nama" name="nama" required><br><br>
+
+        <label for="alamat">Alamat:</label><br>
+        <textarea id="alamat" name="alamat" rows="3" required></textarea><br><br>
+
+        <label for="kontak">Kontak (WA/Email):</label><br>
+        <input type="text" id="kontak" name="kontak" required><br><br>
+
+        <button type="submit">Kirim Pesanan (PDF)</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Toko Kue Lebaran</p>
+  </footer>
+
+  <script>
+    async function renderCartOrder() {
+      const ringkasanContainer = document.getElementById('ringkasan-pesanan');
+      const orderData = JSON.parse(localStorage.getItem('orderFromCart') || '[]');
+
+      if (orderData.length === 0) {
+        ringkasanContainer.innerHTML = '<p><em>Tidak ada data pesanan dari keranjang.</em></p>';
+        return [];
+      }
+
+      let ringkasan = '<h3>Ringkasan Pesanan Anda:</h3><ul>';
+      let total = 0;
+      orderData.forEach(item => {
+        total += item.total;
+        ringkasan += <li>${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}</li>;
+      });
+      ringkasan += `<ul><p><strong>Total: Rp ${total.toLocaleString('id-ID')}</strong></p></ul>`;
+
+      ringkasanContainer.innerHTML = ringkasan;
+      return orderData;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const orderData = await renderCartOrder();
+
+      const form = document.getElementById('order-form');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const nama = document.getElementById('nama').value;
+        const alamat = document.getElementById('alamat').value;
+        const kontak = document.getElementById('kontak').value;
+
+        if (orderData.length === 0) {
+          alert('Tidak ada produk untuk dipesan.');
+          return;
+        }
+
+        let content = "--- RINGKASAN PESANAN ---\n\n";
+
+        orderData.forEach(item => {
+        content += `${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}\n`;
+
+        });
+        let total = orderData.reduce((sum, i) => sum + i.total, 0);
+        content += `\nTotal: Rp ${total.toLocaleString('id-ID')}\n\n`;
+        content += `Nama: ${nama}\nAlamat: ${alamat}\nKontak: ${kontak}\n`;
+
+        // Buat PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        doc.text(content, 10, 20);
+        doc.save(`pesanan_${nama.replace(/\s/g, '_')}.pdf`);
+
+
+        localStorage.removeItem('orderFromCart');
+        alert("Pesanan berhasil dibuat dalam bentuk PDF.");
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kontak - Toko Kue Lebaran Online</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>Toko Kue Lebaran Online</header>
+<nav>
+  <a href="beranda.html">Beranda</a>
+  <a href="produk.html">Produk</a>
+  <a href="pesan.html">Pesan</a>
+  <a href="tentang.html">Tentang</a>
+  <a href="kontak.html" class="active" aria-current="page">Kontak</a>
+</nav>
+<main>
+    <h1>Hubungi Kami</h1>
+    <p style="max-width: 700px; margin: 20px auto; font-size:1.1rem; line-height:1.5; text-align:center;">
+      Jika Anda memiliki pertanyaan, saran, atau ingin berkonsultasi tentang produk kami,
+      silakan hubungi kami melalui form di bawah ini atau menggunakan detail kontak berikut:
+    </p>
+    <section style="max-width: 600px; margin: 20px auto; font-size:1rem; line-height:1.4; color:#4a3c1a;">
+      <p><strong>Email:</strong> support@kuelebaranonline.com</p>
+      <p><strong>Telepon:</strong> ‪+62 812 3456 7890‬</p>
+      <p><strong>Alamat:</strong> Jl. Kebahagiaan No. 99, Palembang, Indonesia</p>
+    </section>
+    <form id="contact-form" style="max-width: 600px; margin: 0 auto;" aria-label="Formulir kontak">
+        <label for="namaKontak">Nama:</label>
+        <input type="text" id="namaKontak" name="namaKontak" required />
+        
+        <label for="emailKontak">Email:</label>
+        <input type="email" id="emailKontak" name="emailKontak" required />
+        
+        <label for="pesanKontak">Pesan:</label>
+        <textarea id="pesanKontak" name="pesanKontak" required></textarea>
+        
+        <button type="submit">Kirim Pesan</button>
+      </form>
+      <p id="contact-status" style="max-width: 600px; margin: 15px auto; color: green; font-weight: 600; display:none;"></p>
+    </main>
+    <footer>
+        © 2025 Toko Kue Lebaran. Selamat Menyambut Hari Raya!
+      </footer>
+
+      <script>
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const statusEl = document.getElementById('contact-status');
+
+          const nama = this.namaKontak.value.trim();
+          const email = this.emailKontak.value.trim();
+          const pesan = this.pesanKontak.value.trim();
+
+          if (!nama || !email || !pesan) {
+      alert('Mohon isi semua kolom yang diperlukan.');
+      return;
+    }
+
+    // Simulate send message (no backend)
+    statusEl.style.display = 'none';
+    statusEl.textContent = '';
+
+    setTimeout(() => {
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Pesan Anda telah terkirim. Terima kasih!';
+      this.reset();
+    }, 1000);
+  });
+</script>
+
+<script src="chatbox.js"></script>
+</body>
+</html>

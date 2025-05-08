@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Produk - Toko Kue Lebaran Online</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    Toko Kue Lebaran Online
+    <a href="keranjang.html" id="cart-icon" aria-label="Lihat Keranjang">🛒</a>
+  </header>
+
+  <nav>
+    <a href="beranda.html">Beranda</a>
+    <a href="produk.html" class="active" aria-current="page">Produk</a>
+    <a href="pesan.html">Pesan</a>
+    <a href="tentang.html">Tentang</a>
+    <a href="kontak.html">Kontak</a>
+  </nav>
+
+  <main>
+    <h1>Daftar Kue Lebaran Spesial</h1>
+    <div class="product-list" id="product-list" aria-label="Daftar produk kue lebaran">
+      <!-- Produk akan dimuat lewat JavaScript -->
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Toko Kue Lebaran. Selamat Menyambut Hari Raya!
+  </footer>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: 'Nastar Keju',
+        description: 'Kue nastar lembut dengan isian selai nanas dan topping keju parut lezat.',
+        price: 35000,
+        image: 'https://www.rujukannews.com/wp-content/uploads/2023/04/resep-kue-nastar-lembut-lumer-di-mulut-ukuran-1Kg.jpg'
+      },
+      {
+        id: 2,
+        name: 'Kastengel',
+        description: 'Kue kastengel gurih dan renyah dengan rasa keju khas yang menggoda.',
+        price: 40000,
+        image: 'https://asset-2.tstatic.net/makassar/foto/bank/images/Resep-Kastangel-Keju-Ide-Kue-Kering-untuk-Lebaran-2022.jpg'
+      },
+      {
+        id: 3,
+        name: 'Putri Salju',
+        description: 'Kue putri salju manis bertabur gula halus yang meleleh di mulut.',
+        price: 30000,
+        image: 'https://cdn.idntimes.com/content-images/community/2022/03/fromandroid-e05ea8fec9188ab5e17b333c693535ac_600x400.jpg'
+      },
+      {
+        id: 4,
+        name: 'Lidah Kucing',
+        description: 'Kue lidah kucing tipis dan renyah dengan rasa vanilla dan mentega.',
+        price: 28000,
+        image: 'https://img.freepik.com/fotos-premium/kue-lidah-kucing-ou-lingua-de-gato-cookies-finas-com-sabor-doce-e-crocantes_514255-3368.jpg'
+      },
+      {
+        id: 5,
+        name: 'Sagu Keju',
+        description: 'Kue sagu keju legit, renyah di luar dan lembut di dalam.',
+        price: 32000,
+        image: 'https://bing.com/th?id=OSK.30f0fbf662450124a3bd8a89de988ea8'
+      }
+    ];
+
+    function formatCurrency(num) {
+      return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',00';
+    }
+
+    function renderProducts() {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${p.image}" alt="Foto ${p.name}" class="product-img" loading="lazy" />
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-desc">${p.description}</div>
+            <div class="product-price">${formatCurrency(p.price)}</div>
+            <button class="btn-add" data-id="${p.id}" aria-label="Tambah ${p.name} ke keranjang">Tambah ke Keranjang</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Tambahkan event listener ke semua tombol
+      const buttons = container.querySelectorAll('.btn-add');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const productId = parseInt(btn.dataset.id);
+          const selectedProduct = products.find(p => p.id === productId);
+          if (selectedProduct && window.addToCart) {
+            window.addToCart(selectedProduct);
+            alert(`${selectedProduct.name} telah ditambahkan ke keranjang.`);
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderProducts);
+  </script>
+
+  <script src="cart.js"></script>
+  <script src="chatbox.js"></script>
+</body>
+</html>
