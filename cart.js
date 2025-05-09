@@ -65,7 +65,8 @@ function getCart() {
       if (cart.length === 0) return;
       let message = '<h3>Ringkasan Pesanan:</h3><ul>';
       cart.forEach(p => {
-        message += <li>${p.name} - ${p.quantity} pcs - Rp ${p.total.toLocaleString('id-ID')}</li>;
+        message += `<li>${p.name} - ${p.quantity} pcs - Rp ${p.total.toLocaleString('id-ID')}</li>`;
+
       });
       message += '</ul>';
       checkoutResult.innerHTML = message + '<p>Silakan lanjutkan konfirmasi via WhatsApp atau email kami.</p>';
