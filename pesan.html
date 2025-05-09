@@ -44,6 +44,9 @@
       const ringkasanContainer = document.getElementById('ringkasan-pesanan');
       const orderData = JSON.parse(localStorage.getItem('orderFromCart') || '[]');
 
+      // Debug untuk melihat data pesanan di konsol
+      console.log('Order Data:', orderData);
+
       if (orderData.length === 0) {
         ringkasanContainer.innerHTML = '<p><em>Tidak ada data pesanan dari keranjang.</em></p>';
         return [];
@@ -53,7 +56,7 @@
       let total = 0;
       orderData.forEach(item => {
         total += item.total;
-        ringkasan += <li>${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}</li>;
+        ringkasan += `<li>${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}</li>`;
       });
       ringkasan += `<ul><p><strong>Total: Rp ${total.toLocaleString('id-ID')}</strong></p></ul>`;
 
@@ -78,14 +81,16 @@
         }
 
         let content = "--- RINGKASAN PESANAN ---\n\n";
-
         orderData.forEach(item => {
-        content += `${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}\n`;
-
+          content += `${item.name} - ${item.quantity} pcs - Rp ${item.total.toLocaleString('id-ID')}\n`;
         });
-        let total = orderData.reduce((sum, i) => sum + i.total, 0);
+
+        const total = orderData.reduce((sum, i) => sum + i.total, 0);
         content += `\nTotal: Rp ${total.toLocaleString('id-ID')}\n\n`;
         content += `Nama: ${nama}\nAlamat: ${alamat}\nKontak: ${kontak}\n`;
+
+        // Debug untuk melihat content yang akan dimasukkan ke PDF
+        console.log('PDF Content:', content);
 
         // Buat PDF
         const { jsPDF } = window.jspdf;
@@ -93,9 +98,11 @@
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.text(content, 10, 20);
+
+        // Simpan PDF dengan nama file berdasarkan nama pemesan
         doc.save(`pesanan_${nama.replace(/\s/g, '_')}.pdf`);
 
-
+        // Hapus data pesanan dari localStorage setelah PDF dibuat
         localStorage.removeItem('orderFromCart');
         alert("Pesanan berhasil dibuat dalam bentuk PDF.");
       });
